@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: MyFilters
+# Project: Filters
 # Configurations: Debug
 # =============================================================================
 
@@ -41,40 +41,40 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = C$:/Users/Maya$ Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target MyFilters
+# Object build statements for EXECUTABLE target Filters
 
 
 #############################################
-# Order-only phony target for MyFilters
+# Order-only phony target for Filters
 
-build cmake_object_order_depends_target_MyFilters: phony || CMakeFiles/MyFilters.dir
+build cmake_object_order_depends_target_Filters: phony || CMakeFiles/Filters.dir
 
-build CMakeFiles/MyFilters.dir/main.cpp.obj: CXX_COMPILER__MyFilters_Debug C$:/Users/Maya$ Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/main.cpp || cmake_object_order_depends_target_MyFilters
-  DEP_FILE = CMakeFiles\MyFilters.dir\main.cpp.obj.d
+build CMakeFiles/Filters.dir/main.cpp.obj: CXX_COMPILER__Filters_Debug C$:/Users/Maya$ Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/main.cpp || cmake_object_order_depends_target_Filters
+  DEP_FILE = CMakeFiles\Filters.dir\main.cpp.obj.d
   FLAGS = -g -std=gnu++20
-  OBJECT_DIR = CMakeFiles\MyFilters.dir
-  OBJECT_FILE_DIR = CMakeFiles\MyFilters.dir
-  TARGET_COMPILE_PDB = CMakeFiles\MyFilters.dir\
-  TARGET_PDB = MyFilters.pdb
+  OBJECT_DIR = CMakeFiles\Filters.dir
+  OBJECT_FILE_DIR = CMakeFiles\Filters.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Filters.dir\
+  TARGET_PDB = Filters.pdb
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target MyFilters
+# Link build statements for EXECUTABLE target Filters
 
 
 #############################################
-# Link the executable MyFilters.exe
+# Link the executable Filters.exe
 
-build MyFilters.exe: CXX_EXECUTABLE_LINKER__MyFilters_Debug CMakeFiles/MyFilters.dir/main.cpp.obj
+build Filters.exe: CXX_EXECUTABLE_LINKER__Filters_Debug CMakeFiles/Filters.dir/main.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
-  OBJECT_DIR = CMakeFiles\MyFilters.dir
+  OBJECT_DIR = CMakeFiles\Filters.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\MyFilters.dir\
-  TARGET_FILE = MyFilters.exe
-  TARGET_IMPLIB = libMyFilters.dll.a
-  TARGET_PDB = MyFilters.pdb
+  TARGET_COMPILE_PDB = CMakeFiles\Filters.dir\
+  TARGET_FILE = Filters.exe
+  TARGET_IMPLIB = libFilters.dll.a
+  TARGET_PDB = Filters.pdb
 
 
 #############################################
@@ -102,7 +102,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build MyFilters: phony MyFilters.exe
+build Filters: phony Filters.exe
 
 # =============================================================================
 # Folder targets.
@@ -112,7 +112,7 @@ build MyFilters: phony MyFilters.exe
 #############################################
 # Folder: C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug
 
-build all: phony MyFilters.exe
+build all: phony Filters.exe
 
 # =============================================================================
 # Built-in targets

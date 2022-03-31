@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
-project(MyFilters)
+project(Filters)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(MyFilters main.cpp)
+add_executable(Filters main.cpp)

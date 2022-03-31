@@ -1,3 +1,3 @@
-C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug/CMakeFiles/MyFilters.dir
+C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug/CMakeFiles/Filters.dir
 C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "MyFilters",
+					"name" : "Filters",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "MyFilters::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-MyFilters-Debug-372c7c362f5cd67c74f1.json",
-					"name" : "MyFilters",
+					"id" : "Filters::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Filters-Debug-77275bafb9725bd8dcd8.json",
+					"name" : "Filters",
 					"projectIndex" : 0
 				}
 			]
