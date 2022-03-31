@@ -757,8 +757,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/MyFilters/cmake-build-debug",
-		"source" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/MyFilters"
+		"build" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug",
+		"source" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters"
 	},
 	"version" : 
 	{

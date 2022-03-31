@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/MyFilters/cmake-build-debug"
+			"value" : "c:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -623,7 +623,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/MyFilters"
+			"value" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1239,7 +1239,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/MyFilters/cmake-build-debug"
+			"value" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug"
 		},
 		{
 			"name" : "MyFilters_IS_TOP_LEVEL",
@@ -1263,7 +1263,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/MyFilters"
+			"value" : "C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters"
 		}
 	],
 	"kind" : "cache",
