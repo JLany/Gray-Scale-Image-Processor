@@ -14,8 +14,8 @@ void bwFilter1();       // 1
 void invertFilter();    // 2
                         // 3
                         // 4
-                        // 5
-void rotateFilter();    // 6
+void rotateFilter();    // 5
+                        // 6
                         // 7
                         // 8
                         // 9
@@ -102,7 +102,7 @@ void bwFilter1() {
 void invertFilter() {
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            img[i][j] = 255 - img[i][j];
+            img[i][j] = 255 - img[i][j]; // Invert each pixel
         }
     }
 }
