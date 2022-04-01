@@ -64,6 +64,11 @@ int main() {
     
     //use else if conditions here for other processes
 
+
+    //else if(userInput == "0"){
+    //  printf("Program Finished");
+    //  break;
+    //}
 	else
 		printf("Invalid Input. Please try again");
 	//}
