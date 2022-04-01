@@ -10,12 +10,22 @@ unsigned char img[SIZE][SIZE];
 
 void readImage();
 void writeImage();
-void bwFilter1();
-void invertFilter();
-
+void bwFilter1();       // 1
+void invertFilter();    // 2
+                        // 3
+                        // 4
+void rotateFilter(int); // 5
+                        // 6
+                        // 7
+                        // 8
+                        // 9
+                        // a
+                        // b
+                        // c
 
 int main() {
 	string userInput;
+    int angle;
 	//while(true){
 	//	*need to add screen clear here to clean screen after each process*
 	readImage();		//gets image from user
@@ -31,6 +41,12 @@ int main() {
 	}
     else if (userInput == "2") {
         invertFilter();
+        writeImage();
+    }
+    else if (userInput == "5") {
+        cout << "Rotate (90), (180) or (360) degrees?\n";
+        cin >> angle;
+        rotateFilter(angle);
         writeImage();
     }
 	//use else if conditions here for other processes
@@ -88,6 +104,50 @@ void invertFilter() { // There are some ghost pixels that float black on the ima
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
             img[i][j] = 256 - img[i][j];
+        }
+    }
+}
+
+void rotateFilter(int angle) {
+    if (angle == 270) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = i; j < SIZE; j++) {
+                swap(img[i][j], img[j][i]);
+            }
+        }
+
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = i; j < SIZE; j++) {
+                swap(img[i][j], img[j][i]);
+            }
+        }
+    }
+    if (angle == 180) { // THIS FLIPS THE IMAGE! SUPPOSED TO ROTATE 180.(NEEDS FIX)
+        for (int i = 0; i < SIZE / 2; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                swap(img[i][j], img[SIZE-1-i][j]);
+            }
+        }
+    }
+    if (angle == 90) {
+        // First flip the image
+        for (int i = 0; i < SIZE / 2; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                swap(img[i][j], img[SIZE-1-i][j]);
+            }
+        }
+        // Then get transpose
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = i; j < SIZE; j++) {
+                swap(img[i][j], img[j][i]);
+            }
+        }
+    }
+    if (angle == 360) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = i; j < SIZE; j++) {
+                swap(img[i][j], img[i][j]);
+            }
         }
     }
 }
