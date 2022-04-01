@@ -30,7 +30,7 @@ int main() {
 	readImage();		//gets image from user
 	//give user choices
 	printf("Please Select a filter:\n1- Black & White Filter\n2- Invert Filter\n3- Merge Filter\n");
-	printf("4- Flip Image\n5- Darken and Lighten Image\n6- Rotate Image\n7- Detect Image Edges\n");
+	printf("4- Flip Image\n5- Rotate Image\n6- Darken and Lighten Image\n7- Detect Image Edges\n");
 	printf("8- Enlarge Image\n9- Shrink Image\na- Mirror Image\nb- Shuffle Image\nc- Blur Image\n");
 	cin >> userInput;
 
@@ -42,7 +42,7 @@ int main() {
         invertFilter();
         writeImage();
     }
-    else if (userInput == "6") {
+    else if (userInput == "5") {
         rotateFilter();
         writeImage();
     }
