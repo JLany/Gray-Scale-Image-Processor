@@ -19,7 +19,7 @@ void rotateFilter();    // 5
                         // 7
                         // 8
                         // 9
-                        // a
+void mirrorFilter();    // a
                         // b
                         // c
 
@@ -56,7 +56,13 @@ int main() {
         rotateFilter();
         writeImage();
     }
-	//use else if conditions here for other processes
+
+    else if (userInput == "a") {
+        mirrorFilter();
+        writeImage();
+    }
+    
+    //use else if conditions here for other processes
 
 	else
 		printf("Invalid Input. Please try again");
@@ -119,8 +125,8 @@ void flipFilter() {
     printf("h to flip horizontally, v to flip vertically: ");
     cin >> flip;
     if (flip == "h") {
-        for (int i = 0; i < SIZE;i++) {
-            for (int j = 0;j < SIZE/2;j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0;j < SIZE / 2; j++) {
                 swap(img[i][j], img[i][SIZE - 1 - j]);
             }
         }
@@ -179,5 +185,43 @@ void rotate90() {
         for (int j = 0; j < SIZE; j++) {
             img[j][SIZE-1-i] = temp[i][j];
         }
+    }
+}
+
+void mirrorFilter() {
+    string mirrorInput;
+    printf("1- to Mirror Left half, 2- to Mirror Right half\n3- to Mirror Upper half, 4- to Mirror Lower half\n");
+    cin >> mirrorInput;
+    if (mirrorInput == "1") {                           //left half mirror
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = SIZE / 2; j < SIZE; j++) {     //loop over right half
+                img[i][j] = img[i][SIZE - 1 -j];            //change every pixel of right half to the opposite half
+            }
+        }
+    }
+    else if (mirrorInput == "2") {                  //right half mirror
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < (SIZE / 2); j++) {    //loop over left half
+                img[i][j] = img[i][SIZE - 1 -j];          //change every pixel to its opposite half
+            }
+        }
+    }
+    else if (mirrorInput == "3") {                  //upper half mirror
+        for (int i = SIZE / 2; i < SIZE; i++) {     
+            for (int j = 0; j < SIZE; j++) {        //loop over lower half
+                img[i][j] = img[SIZE - 1 - i][j];        //change every pixel to its opposite half
+            }
+        }
+    }
+    else if (mirrorInput == "4") {                  //lower half mirror
+        for (int i = 0;i < (SIZE / 2);i++) {
+            for (int j = 0;j < SIZE;j++) {          //loop over upper half
+                img[i][j] = img[SIZE -1 - i][j];    //change every pixel to its opposite half
+            }
+        }
+    }
+    else {
+        printf("Invalid input. Please try again\n");
+        return mirrorFilter();
     }
 }
