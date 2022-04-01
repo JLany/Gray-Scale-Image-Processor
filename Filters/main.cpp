@@ -17,13 +17,18 @@ void flipFilter();      // 4
 void rotateFilter();    // 5
                         // 6
                         // 7
-                        // 8
+void enlargeFilter();   // 8
                         // 9
 void mirrorFilter();    // a
                         // b
                         // c
 
 void rotate90();
+unsigned char quarter[SIZE/2][SIZE/2];
+void firstQuarter();
+void secondQuarter();
+void thirdQuarter();
+void fourthQuarter();
 
 
 int main() {
@@ -54,6 +59,11 @@ int main() {
     
     else if (userInput == "5") {
         rotateFilter();
+        writeImage();
+    }
+
+    else if (userInput == "8") {
+        enlargeFilter();
         writeImage();
     }
 
@@ -194,6 +204,84 @@ void rotate90() {
         }
     }
 }
+
+
+
+void enlargeFilter() {
+    char inputQuarter;
+    cout << "Which quarter to enlarge 1, 2, 3 or 4?\n";
+    cin >> inputQuarter;
+    // Take a certain quarter to work with
+    if (inputQuarter == '1') {
+        firstQuarter();
+    }
+    else if (inputQuarter == '2') {
+        secondQuarter();
+    }
+    else if (inputQuarter == '3') {
+        thirdQuarter();
+    }
+    else if (inputQuarter == '4') {
+        fourthQuarter();
+    }
+    else {
+        cout << "Unrecognized quarter!\n";
+        firstQuarter();
+    }
+    // Enlarge that quarter into the whole image
+    int k = 0;
+    for (int i = 0; i < SIZE; i+=2) {
+        int s = 0;
+        for (int j = 0; j < SIZE; j+=2) { // By putting each single pixel in the quarter
+            img[i][j] = quarter[k][s];    // into 4 pixels of the original-size image
+            img[i+1][j] = quarter[k][s];
+            img[i][j+1] = quarter[k][s];
+            img[i+1][j+1] = quarter[k][s];
+            s++;
+        }
+        k++;
+    }
+}
+
+void firstQuarter() { // Extracts first quarter
+    for (int i = 0; i < SIZE/2; i++) {
+        for (int j = 0; j < SIZE/2; j++) {
+            quarter[i][j] = img[i][j];
+        }
+    }
+}
+
+void secondQuarter() { // Extracts second quarter
+    for (int i = 0; i < SIZE/2; i++) {
+        for (int j = SIZE/2; j < SIZE; j++) {
+            quarter[i][j] = img[i][j];
+        }
+    }
+}
+
+void thirdQuarter() { // Extracts third quarter
+    int k = 0;
+    for (int i = SIZE/2; i < SIZE; i++) {
+        for (int j = 0; j < SIZE/2; j++) {
+            quarter[k][j] = img[i][j];
+        }
+        k++;
+    }
+}
+
+void fourthQuarter() { // Extracts fourth quarter
+    int k = 0;
+    for (int i = SIZE/2; i < SIZE; i++) {
+        int s = 0;
+        for (int j = SIZE/2; j < SIZE; j++) {
+            quarter[k][s] = img[i][j];
+            s++;
+        }
+        k++;
+    }
+}
+
+
 
 void mirrorFilter() {
     string mirrorInput;
