@@ -99,11 +99,10 @@ void bwFilter1() {
     }
 }
 
-void invertFilter() { // There are some ghost pixels that float black on the image??
-                      // Don't know what is the problem.
+void invertFilter() {
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            img[i][j] = 256 - img[i][j];
+            img[i][j] = 255 - img[i][j];
         }
     }
 }
