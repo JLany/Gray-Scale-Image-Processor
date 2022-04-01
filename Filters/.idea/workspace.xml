@@ -20,6 +20,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -68,7 +69,7 @@
       <option name="presentableId" value="Default" />
       <updated>1648749015612</updated>
       <workItem from="1648749017537" duration="21000" />
-      <workItem from="1648799352730" duration="5000" />
+      <workItem from="1648799352730" duration="421000" />
     </task>
     <servers />
   </component>
