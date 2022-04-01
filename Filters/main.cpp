@@ -16,6 +16,9 @@ void invertFilter();    // 2
                         // 4
 void rotateFilter();    // 5
                         // 6
+void flipFilter();      // 4
+                        // 5
+void rotateFilter();    // 6
                         // 7
                         // 8
                         // 9
@@ -45,7 +48,11 @@ int main() {
         invertFilter();
         writeImage();
     }
-    else if (userInput == "5") {
+    else if (userInput == "4") {
+        flipFilter();
+        writeImage();
+    }
+    else if (userInput == "6") {
         rotateFilter();
         writeImage();
     }
@@ -107,6 +114,9 @@ void invertFilter() {
     }
 }
 
+void flipFilter() {
+    
+}
 void rotateFilter() {
     int angle;
     cout << "Rotate (90), (180), (270) or (360) degrees?\n";
