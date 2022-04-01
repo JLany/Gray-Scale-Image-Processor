@@ -14,8 +14,8 @@ void bwFilter1();       // 1
 void invertFilter();    // 2
                         // 3
                         // 4
-void rotateFilter(int); // 5
-                        // 6
+                        // 5
+void rotateFilter(int); // 6
                         // 7
                         // 8
                         // 9
@@ -25,7 +25,6 @@ void rotateFilter(int); // 5
 
 int main() {
 	string userInput;
-    int angle;
 	//while(true){
 	//	*need to add screen clear here to clean screen after each process*
 	readImage();		//gets image from user
@@ -43,10 +42,8 @@ int main() {
         invertFilter();
         writeImage();
     }
-    else if (userInput == "5") {
-        cout << "Rotate (90), (180) or (360) degrees?\n";
-        cin >> angle;
-        rotateFilter(angle);
+    else if (userInput == "6") {
+        rotateFilter();
         writeImage();
     }
 	//use else if conditions here for other processes
@@ -107,7 +104,10 @@ void invertFilter() {
     }
 }
 
-void rotateFilter(int angle) {
+void rotateFilter() {
+    int angle;
+    cout << "Rotate (90), (180), (270) or (360) degrees?\n";
+    cin >> angle;
     if (angle == 270) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = i; j < SIZE; j++) {
