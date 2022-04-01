@@ -7,9 +7,11 @@ using namespace std;
 
 unsigned char img[SIZE][SIZE];
 
-void bwFilter1();
+
 void readImage();
 void writeImage();
+void bwFilter1();
+void invertFilter();
 
 
 int main() {
@@ -35,6 +37,26 @@ int main() {
 }
 
 
+
+
+void readImage() {
+    char imageName[100];
+    printf("Please enter name of the image to process: ");
+    cin >> imageName;
+    strcat(imageName, ".bmp");
+    readGSBMP(imageName, img);
+}
+
+
+void writeImage() {
+    char imageName[100];
+    printf("Please enter name of the new image: ");
+    cin >> imageName;
+    strcat(imageName, ".bmp");
+    writeGSBMP(imageName, img);
+}
+
+
 void bwFilter1() {
     //calculate Average grey pixel
     ////////need to check if this calculates Avg correctly
@@ -57,20 +79,11 @@ void bwFilter1() {
     }
 }
 
-
-void readImage() {
-    char imageName[100];
-    printf("Please enter name of the image to process: ");
-    cin >> imageName;
-    strcat(imageName, ".bmp");
-    readGSBMP(imageName, img);
-}
-
-
-void writeImage() {
-    char imageName[100];
-    printf("Please enter name of the new image: ");
-    cin >> imageName;
-    strcat(imageName, ".bmp");
-    writeGSBMP(imageName, img);
+void invertFilter() { // There are some ghost pixels that float black on the image??
+                      // Don't know what is the problem.
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            img[i][j] = 256 - img[i][j];
+        }
+    }
 }
