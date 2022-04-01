@@ -1,1 +1,0 @@
-CMakeLists.txt not found in C:\Users\Maya Ayman\Desktop\teamTask\Gray-Scale-Image-Processor\MyFilters Select CMakeLists.txt
