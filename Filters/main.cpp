@@ -7,43 +7,10 @@ using namespace std;
 
 unsigned char img[SIZE][SIZE];
 
-void readImage() {
-	char imageName[100];
-	printf("Please enter name of the image to process: ");
-	cin >> imageName;
-	strcat(imageName, ".bmp");
-	readGSBMP(imageName, img);
-}
+void bwFilter1();
+void readImage();
+void writeImage();
 
-void writeImage() {
-	char imageName[100];
-	printf("Please enter name of the new image: ");
-	cin >> imageName;
-	strcat(imageName, ".bmp");
-	writeGSBMP(imageName, img);
-}
-
-void bwFilter1() {
-	//calculate Average grey pixel
-	////////need to check if this calculates Avg correctly
-	int avg = 0;
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			avg = avg + img[i][j];
-		}
-	}
-	avg = avg / (SIZE * SIZE);
-
-	//Apply B&W Filter
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			if (img[i][j] > avg)
-				img[i][j] = 255;
-			else
-				img[i][j] = 0;
-		}
-	}
-}
 
 int main() {
 	string userInput;
@@ -65,4 +32,45 @@ int main() {
 	else
 		printf("Invalid Input. Please try again");
 	//}
+}
+
+
+void bwFilter1() {
+    //calculate Average grey pixel
+    ////////need to check if this calculates Avg correctly
+    int avg = 0;
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            avg = avg + img[i][j];
+        }
+    }
+    avg = avg / (SIZE * SIZE);
+
+    //Apply B&W Filter
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            if (img[i][j] > avg)
+                img[i][j] = 255;
+            else
+                img[i][j] = 0;
+        }
+    }
+}
+
+
+void readImage() {
+    char imageName[100];
+    printf("Please enter name of the image to process: ");
+    cin >> imageName;
+    strcat(imageName, ".bmp");
+    readGSBMP(imageName, img);
+}
+
+
+void writeImage() {
+    char imageName[100];
+    printf("Please enter name of the new image: ");
+    cin >> imageName;
+    strcat(imageName, ".bmp");
+    writeGSBMP(imageName, img);
 }
