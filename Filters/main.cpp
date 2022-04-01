@@ -115,13 +115,14 @@ void rotateFilter() {
             }
         }
     }
-    if (angle == 180) { // THIS FLIPS THE IMAGE! SUPPOSED TO ROTATE 180.(NEEDS FIX)
+    if (angle == 180) {
+        //flips image vertically
         for (int i = 0; i < SIZE / 2; i++) {
             for (int j = 0; j < SIZE; j++) {
                 swap(img[i][j], img[SIZE-1-i][j]);
             }
         }
-        //testing 180 fix
+        //flips image horizontally
         for (int i = 0; i < SIZE;i++) {
             for (int j = 0;j < SIZE/2;j++) {
                 swap(img[i][j], img[i][SIZE - 1 - j]);
