@@ -13,12 +13,9 @@ void writeImage();
 void bwFilter1();       // 1
 void invertFilter();    // 2
                         // 3
-                        // 4
+void flipFilter();      // 4
 void rotateFilter();    // 5
                         // 6
-void flipFilter();      // 4
-                        // 5
-void rotateFilter();    // 6
                         // 7
                         // 8
                         // 9
