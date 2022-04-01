@@ -23,6 +23,9 @@ void rotateFilter();    // 6
                         // b
                         // c
 
+void rotate90();
+
+
 int main() {
 	string userInput;
 	//while(true){
@@ -30,7 +33,7 @@ int main() {
 	readImage();		//gets image from user
 	//give user choices
 	printf("Please Select a filter:\n1- Black & White Filter\n2- Invert Filter\n3- Merge Filter\n");
-	printf("4- Flip Image\n5- Darken and Lighten Image\n6- Rotate Image\n7- Detect Image Edges\n");
+	printf("4- Flip Image\n5- Rotate Image\n6- Darken and Lighten Image\n7- Detect Image Edges\n");
 	printf("8- Enlarge Image\n9- Shrink Image\na- Mirror Image\nb- Shuffle Image\nc- Blur Image\n");
 	cin >> userInput;
 
@@ -115,46 +118,41 @@ void rotateFilter() {
     int angle;
     cout << "Rotate (90), (180), (270) or (360) degrees?\n";
     cin >> angle;
-    if (angle == 270) {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = i; j < SIZE; j++) {
-                swap(img[i][j], img[j][i]);
-            }
-        }
-    }
-    if (angle == 180) {
-        //flips image vertically
-        for (int i = 0; i < SIZE / 2; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                swap(img[i][j], img[SIZE-1-i][j]);
-            }
-        }
-        //flips image horizontally
-        for (int i = 0; i < SIZE;i++) {
-            for (int j = 0;j < SIZE/2;j++) {
-                swap(img[i][j], img[i][SIZE - 1 - j]);
-            }
-        }
-    }
-    if (angle == 90) {
-        // First flip the image
-        for (int i = 0; i < SIZE / 2; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                swap(img[i][j], img[SIZE-1-i][j]);
-            }
-        }
-        // Then get transpose
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = i; j < SIZE; j++) {
-                swap(img[i][j], img[j][i]);
-            }
-        }
-    }
     if (angle == 360) {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = i; j < SIZE; j++) {
-                swap(img[i][j], img[i][j]);
-            }
+        rotate90();
+        rotate90();
+        rotate90();
+        rotate90();
+    }
+    else if (angle == 270) {
+        rotate90();
+        rotate90();
+        rotate90();
+    }
+    else if (angle == 180) {
+        rotate90();
+        rotate90();
+    }
+    else if (angle == 90) {
+        rotate90();
+    }
+    else {
+        cout << "Not a recognized angle!";
+    }
+}
+
+void rotate90() {
+    unsigned char temp[SIZE][SIZE];
+    // Store img into a temporary array
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            temp[i][j] = img[i][j];
+        }
+    }
+    // Store into img rotated 90 Deg.
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            img[j][SIZE-1-i] = temp[i][j];
         }
     }
 }
