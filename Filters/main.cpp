@@ -29,6 +29,10 @@ int main() {
 		bwFilter1();
 		writeImage();
 	}
+    else if (userInput == "2") {
+        invertFilter();
+        writeImage();
+    }
 	//use else if conditions here for other processes
 
 	else
