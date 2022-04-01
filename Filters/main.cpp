@@ -40,16 +40,19 @@ int main() {
 	if (userInput == "1") {
 		bwFilter1();
 		writeImage();
-	}
+    }
+    
     else if (userInput == "2") {
         invertFilter();
         writeImage();
     }
+    
     else if (userInput == "4") {
         flipFilter();
         writeImage();
     }
-    else if (userInput == "6") {
+    
+    else if (userInput == "5") {
         rotateFilter();
         writeImage();
     }
@@ -112,8 +115,29 @@ void invertFilter() {
 }
 
 void flipFilter() {
-    
+    string flip;
+    printf("h to flip horizontally, v to flip vertically: ");
+    cin >> flip;
+    if (flip == "h") {
+        for (int i = 0; i < SIZE;i++) {
+            for (int j = 0;j < SIZE/2;j++) {
+                swap(img[i][j], img[i][SIZE - 1 - j]);
+            }
+        }
+    }
+    else if (flip == "v") {
+        for (int i = 0; i < SIZE / 2; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                swap(img[i][j], img[SIZE-1-i][j]);
+            }
+        }
+    }
+    else {
+        printf("Invalid input, Please try again\n");
+        return flipFilter();
+    }
 }
+
 void rotateFilter() {
     int angle;
     cout << "Rotate (90), (180), (270) or (360) degrees?\n";
@@ -137,7 +161,8 @@ void rotateFilter() {
         rotate90();
     }
     else {
-        cout << "Not a recognized angle!";
+        cout << "Not a recognized angle! Please try again\n";
+        return rotateFilter();
     }
 }
 
