@@ -15,7 +15,7 @@ void invertFilter();    // 2
                         // 3
                         // 4
                         // 5
-void rotateFilter(int); // 6
+void rotateFilter();    // 6
                         // 7
                         // 8
                         // 9
@@ -125,6 +125,12 @@ void rotateFilter() {
         for (int i = 0; i < SIZE / 2; i++) {
             for (int j = 0; j < SIZE; j++) {
                 swap(img[i][j], img[SIZE-1-i][j]);
+            }
+        }
+        //testing 180 fix
+        for (int i = 0; i < SIZE;i++) {
+            for (int j = 0;j < SIZE/2;j++) {
+                swap(img[i][j], img[i][SIZE - 1 - j]);
             }
         }
     }
