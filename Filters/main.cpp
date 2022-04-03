@@ -6,7 +6,7 @@
 using namespace std;
 
 unsigned char img[SIZE][SIZE];
-
+unsigned char quarter[SIZE/2][SIZE/2];
 
 void readImage();
 void writeImage();
@@ -24,7 +24,6 @@ void mirrorFilter();    // a
                         // c
 
 void rotate90();
-unsigned char quarter[SIZE/2][SIZE/2];
 void firstQuarter();
 void secondQuarter();
 void thirdQuarter();
@@ -92,6 +91,8 @@ int main() {
         printf("Screen Cleared\n");
     }
 }
+
+
 
 
 
