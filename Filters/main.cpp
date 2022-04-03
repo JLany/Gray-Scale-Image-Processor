@@ -32,58 +32,65 @@ void fourthQuarter();
 
 
 int main() {
-	string userInput;
-	//while(true){
-	//	*need to add screen clear here to clean screen after each process*
-	readImage();		//gets image from user
-	//give user choices
-	printf("Please Select a filter:\n1- Black & White Filter\n2- Invert Filter\n3- Merge Filter\n");
-	printf("4- Flip Image\n5- Rotate Image\n6- Darken and Lighten Image\n7- Detect Image Edges\n");
-	printf("8- Enlarge Image\n9- Shrink Image\na- Mirror Image\nb- Shuffle Image\nc- Blur Image\n");
-	cin >> userInput;
+    string userInput;
+    readImage();		//gets image from user
+    while (true) {
+        //give user choices
+        printf("Please Select a filter:\n1- Black & White Filter\n2- Invert Filter\n3- Merge Filter\n4 - Flip Image\n5 - Rotate Image\n");
+        printf("6 - Darken and Lighten Image\n7 - Detect Image Edges\n8 - Enlarge Image\n9 - Shrink Image\na - Mirror Image\nb - Shuffle Image\nc - Blur Image\ns - Save changes\n0 - To end\n");
 
-	if (userInput == "1") {
-		bwFilter1();
-		writeImage();
+        cin >> userInput;
+        if (userInput == "1") {
+            bwFilter1();
+            printf("Black and white complete\n");
+        }
+
+        else if (userInput == "2") {
+            invertFilter();
+            printf("Image Inverted\n");
+        }
+
+        else if (userInput == "4") {
+            flipFilter();
+            printf("Image flipped\n");
+        }
+
+        else if (userInput == "5") {
+            rotateFilter();
+            printf("Image rotated\n");
+        }
+
+        else if (userInput == "8") {
+            enlargeFilter();
+            printf("Image enlarged\n");
+        }
+
+        else if (userInput == "a") {
+            mirrorFilter();
+            printf("Image mirrored");
+        }
+
+        //use else if conditions here for other processes
+        else if (userInput == "s") {
+            writeImage();
+            printf("Save completed\n");
+            sleep(5);           //delay 5 seconds before next operation
+            system("CLS");
+            printf("Screen Cleared\n");
+            return main();      //takes another photo from user
+        }
+
+        else if (userInput == "0") {
+            printf("Program Finished");
+            break;
+        }
+        else
+            printf("Invalid Input. Please try again");
+        
+        sleep(5);               //delay 5 seconds before
+        system("CLS");          //clean screen after each process
+        printf("Screen Cleared\n");
     }
-    
-    else if (userInput == "2") {
-        invertFilter();
-        writeImage();
-    }
-    
-    else if (userInput == "4") {
-        flipFilter();
-        writeImage();
-    }
-    
-    else if (userInput == "5") {
-        rotateFilter();
-        writeImage();
-    }
-
-    else if (userInput == "8") {
-        enlargeFilter();
-        writeImage();
-    }
-
-    else if (userInput == "a") {
-        mirrorFilter();
-        writeImage();
-    }
-    
-    //use else if conditions here for other processes
-
-
-    //else if(userInput == "0"){
-    //  printf("Program Finished");
-    //  break;
-    //}
-	else
-		printf("Invalid Input. Please try again");
-	//}
-
-
 }
 
 
