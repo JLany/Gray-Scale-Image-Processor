@@ -73,9 +73,6 @@ int main() {
         else if (userInput == "s") {
             writeImage();
             printf("Save completed\n");
-            sleep(5);           //delay 5 seconds before next operation
-            system("CLS");
-            printf("Screen Cleared\n");
             return main();      //takes another photo from user
         }
 
@@ -84,11 +81,7 @@ int main() {
             break;
         }
         else
-            printf("Invalid Input. Please try again");
-        
-        sleep(5);               //delay 5 seconds before
-        system("CLS");          //clean screen after each process
-        printf("Screen Cleared\n");
+            printf("Invalid Input. Please try again\n");
     }
 }
 
