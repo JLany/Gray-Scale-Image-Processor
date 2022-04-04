@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <cstring>
 #include <cmath>
 #include "bmplib.cpp"
@@ -10,25 +9,24 @@ unsigned char quarter[SIZE/2][SIZE/2];
 
 void readImage();
 void writeImage();
-void bwFilter1();       // 1
-void invertFilter();    // 2
-                        // 3
-void flipFilter();      // 4
-void rotateFilter();    // 5
-                        // 6
-                        // 7
-void enlargeFilter();   // 8
-                        // 9
-void mirrorFilter();    // a
-                        // b
-                        // c
+void bwFilter1();                 // 1
+void invertFilter();              // 2
+void mergeFilter();               // 3
+void flipFilter();                // 4
+void rotateFilter();              // 5
+void darkenAndLightenFilter();    // 6
+// 7
+void enlargeFilter();             // 8
+void shrinkFilter();              // 9
+void mirrorFilter();              // a
+// b
+void blurFilter();                // c
 
 void rotate90();
 void firstQuarter();
 void secondQuarter();
 void thirdQuarter();
 void fourthQuarter();
-
 
 int main() {
     string userInput;
@@ -43,51 +41,58 @@ int main() {
             bwFilter1();
             printf("Black and white complete\n");
         }
-
         else if (userInput == "2") {
             invertFilter();
             printf("Image Inverted\n");
         }
-
+        else if (userInput == "3"){
+            mergeFilter();
+            printf("2 images merged\n");
+        }
         else if (userInput == "4") {
             flipFilter();
             printf("Image flipped\n");
         }
-
         else if (userInput == "5") {
             rotateFilter();
             printf("Image rotated\n");
         }
-
+        else if (userInput == "6") {
+            darkenAndLightenFilter();
+            printf("Image lightened/darkened\n");
+        }
         else if (userInput == "8") {
             enlargeFilter();
             printf("Image enlarged\n");
         }
-
+        else if (userInput == "9") {
+            shrinkFilter();
+            printf("Image shrunk\n");
+        }
         else if (userInput == "a") {
             mirrorFilter();
-            printf("Image mirrored");
+            printf("Image mirrored\n");
         }
-
-        //use else if conditions here for other processes
+        else if (userInput == "c"){
+            blurFilter();
+            printf("Image blurred\n");
+        }
         else if (userInput == "s") {
             writeImage();
             printf("Save completed\n");
-            return main();      //takes another photo from user
         }
-
         else if (userInput == "0") {
             printf("Program Finished");
             break;
         }
         else
+        {
             printf("Invalid Input. Please try again\n");
+            return main();      //takes another photo from user
+        }
+
     }
 }
-
-
-
-
 
 
 void readImage() {
@@ -98,7 +103,6 @@ void readImage() {
     readGSBMP(imageName, img);
 }
 
-
 void writeImage() {
     char imageName[100];
     printf("Please enter name of the new image: ");
@@ -106,7 +110,6 @@ void writeImage() {
     strcat(imageName, ".bmp");
     writeGSBMP(imageName, img);
 }
-
 
 void bwFilter1() {
     //calculate Average grey pixel
@@ -138,25 +141,40 @@ void invertFilter() {
     }
 }
 
+void mergeFilter(){
+    // Takes the name of the image to be merged with the current one
+    char imageName2[100];
+    unsigned char img2[SIZE][SIZE];
+    cout << "Please enter name of the image to merge: " << endl;
+    cin >> imageName2;
+    strcat(imageName2, ".bmp");
+    readGSBMP(imageName2, img2);
+
+    // Merges the 2 images
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            img[i][j] = (img[i][j] + img2[i][j]) / 2;
+        }
+    }
+}
+
 void flipFilter() {
     string flip;
     printf("h to flip horizontally, v to flip vertically: ");
     cin >> flip;
     if (flip == "h") {
         for (int i = 0; i < SIZE; i++) {
-            for (int j = 0;j < SIZE / 2; j++) {
+            for (int j = 0; j < SIZE / 2; j++) {
                 swap(img[i][j], img[i][SIZE - 1 - j]);
             }
         }
-    }
-    else if (flip == "v") {
+    } else if (flip == "v") {
         for (int i = 0; i < SIZE / 2; i++) {
             for (int j = 0; j < SIZE; j++) {
-                swap(img[i][j], img[SIZE-1-i][j]);
+                swap(img[i][j], img[SIZE - 1 - i][j]);
             }
         }
-    }
-    else {
+    } else {
         printf("Invalid input, Please try again\n");
         return flipFilter();
     }
@@ -206,7 +224,26 @@ void rotate90() {
     }
 }
 
-
+void darkenAndLightenFilter() {
+    string rspns;
+    cout << "Do you want to lighten or darken the image? " << endl;
+    cin >> rspns;
+    transform(rspns.begin(), rspns.end(), rspns.begin(), ::tolower);
+    // Lightens an image
+    if (rspns == "lighten")
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+                (img[i][j] * 1.5 > 255) ? img[i][j] = 255 : img[i][j] += 0.5 * img[i][j];
+            }
+        }
+        // Darkens an image
+    else if (rspns == "darken")
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+                img[i][j] /= 2;
+            }
+        }
+}
 
 void enlargeFilter() {
     char inputQuarter;
@@ -282,7 +319,25 @@ void fourthQuarter() { // Extracts fourth quarter
     }
 }
 
+void shrinkFilter(){
+    int shrinkFactor, x = 0, y = 0;
+    cout << "By which factor do you want to shrink the image: 2, 3, or 4?" << endl;
+    cin >> shrinkFactor;
+    unsigned char newImg[SIZE][SIZE] = {{0}};   //creating a new array to store the shrunk image
+    for (int i = 0; i < SIZE; i += shrinkFactor) {
+        for (int j = 0; j < SIZE; j += shrinkFactor) {
+            newImg[x][y++] = img[i][j];
+        }
+        x++;
+        y = 0;
+    }
+    char imageName[100];
+    printf("Please enter name of the new image: ");
+    cin >> imageName;
+    strcat(imageName, ".bmp");
+    writeGSBMP(imageName, newImg);
 
+}
 
 void mirrorFilter() {
     string mirrorInput;
@@ -303,7 +358,7 @@ void mirrorFilter() {
         }
     }
     else if (mirrorInput == "3") {                  //upper half mirror
-        for (int i = SIZE / 2; i < SIZE; i++) {     
+        for (int i = SIZE / 2; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {        //loop over lower half
                 img[i][j] = img[SIZE - 1 - i][j];        //change every pixel to its opposite half
             }
@@ -319,5 +374,33 @@ void mirrorFilter() {
     else {
         printf("Invalid input. Please try again\n");
         return mirrorFilter();
+    }
+}
+
+void blurFilter(){
+    int avg, sum = 0;
+    // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 horizontally
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; j++) {
+            for (int k = 0; k < 8; ++k) {
+                sum += img[i][j + k];
+            }
+            avg = sum/8;
+            img[i][j] = avg;
+            sum = 0;
+        }
+
+    }
+    sum = 0;
+    // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 vertically
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; j++) {
+            for (int k = 0; k < 8; ++k) {
+                sum += img[j + k][i];
+            }
+            avg = sum/8;
+            img[j][i] = avg;
+            sum = 0;
+        }
     }
 }
