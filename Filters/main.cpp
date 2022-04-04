@@ -331,12 +331,11 @@ void shrinkFilter(){
         x++;
         y = 0;
     }
-    char imageName[100];
-    printf("Please enter name of the new image: ");
-    cin >> imageName;
-    strcat(imageName, ".bmp");
-    writeGSBMP(imageName, newImg);
-
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            img[i][j] = newImg[i][j];
+        }
+    }
 }
 
 void mirrorFilter() {
