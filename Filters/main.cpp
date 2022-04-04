@@ -2,10 +2,14 @@
 #include <cstring>
 #include <cmath>
 #include "bmplib.cpp"
+#include <string>
+
 using namespace std;
 
 unsigned char img[SIZE][SIZE];
+unsigned char temp[4][SIZE/2][SIZE/2] = {};
 unsigned char quarter[(SIZE/2)*(SIZE/2)] = {};
+
 
 void readImage();
 void writeImage();
@@ -19,7 +23,7 @@ void darkenAndLightenFilter();    // 6
 void enlargeFilter();             // 8
 void shrinkFilter();              // 9
 void mirrorFilter();              // a
-// b
+void shuffleFilter();             // b
 void blurFilter();                // c
 
 void rotate90();
@@ -70,6 +74,10 @@ int main() {
         else if (userInput == "a") {
             mirrorFilter();
             printf("Image mirrored\n");
+        }
+        else if (userInput == "b") {
+            shuffleFilter();
+            printf("Image Shuffled\n");
         }
         else if (userInput == "c"){
             blurFilter();
@@ -265,7 +273,7 @@ void enlargeFilter() {
 }
 
 
-void extractQuarter(unsigned char*& ptr, int quarter) {
+void extractQuarter(unsigned char * & ptr, int quarter) {
     int startRow, endRow, startCol, endCol;
     if (quarter == 1) {
         startRow = 0;
@@ -364,6 +372,45 @@ void mirrorFilter() {
         return mirrorFilter();
     }
 }
+
+
+void shuffleFilter() {
+    string order;
+    unsigned char * pQuarter = quarter;
+    int arr = 0;
+    int k = 0, s = 0;
+    cout << "New order of quarters ?\n";
+    cin.ignore();
+    getline(cin, order);
+    for (int i = 0; i < order.length(); i++) {
+        if (order[i] == ' ') {
+            continue;
+        }
+        unsigned char * pTemp = &temp[arr++][0][0];
+        extractQuarter(pQuarter, (int) (order[i] - '0'));
+        for (int j = 0; j < ((SIZE * SIZE) / 4); j++) {
+            pTemp[j] = pQuarter[j];
+        }
+    }
+    int q = 0, row = 0, col = 0;
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            img[i][j] = temp[q][row][col];
+            col++;
+            if (j == SIZE / 2 - 1) {
+                col = 0;
+                q++;
+            }
+        }
+        q--;
+        row++;
+        if (i == SIZE / 2 - 2) {
+            row = 0;
+            q += 2;
+        }
+    }
+}
+
 
 void blurFilter(){
     int avg, sum = 0;
