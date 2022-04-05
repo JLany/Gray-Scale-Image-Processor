@@ -2,6 +2,7 @@
 #include <cstring>
 #include <cmath>
 #include "bmplib.cpp"
+#include<algorithm>
 #include <string>
 
 using namespace std;
@@ -13,13 +14,13 @@ unsigned char quarter[(SIZE/2)*(SIZE/2)] = {};
 
 void readImage();
 void writeImage();
-void bwFilter1();                 // 1
+void bwFilter();                  // 1
 void invertFilter();              // 2
 void mergeFilter();               // 3
 void flipFilter();                // 4
-int rotateFilter();              // 5
+int rotateFilter();               // 5
 void darkenAndLightenFilter();    // 6
-// 7
+void edgeFilter();                // 7
 void enlargeFilter();             // 8
 void shrinkFilter();              // 9
 void mirrorFilter();              // a
@@ -40,7 +41,7 @@ int main() {
 
         cin >> userInput;
         if (userInput == "1") {
-            bwFilter1();
+            bwFilter();
             printf("Black and white complete\n");
         }
         else if (userInput == "2") {
@@ -62,6 +63,10 @@ int main() {
         else if (userInput == "6") {
             darkenAndLightenFilter();
             printf("Image lightened/darkened\n");
+        }
+        else if (userInput == "7") {
+            edgeFilter();
+            printf("Edges detected\n");
         }
         else if (userInput == "8") {
             enlargeFilter();
@@ -86,17 +91,16 @@ int main() {
         else if (userInput == "s") {
             writeImage();
             printf("Save completed\n");
+            sleep(1);
+            return main();      //takes another photo from user
+
         }
         else if (userInput == "0") {
             printf("Program Finished");
             break;
         }
         else
-        {
             printf("Invalid Input. Please try again\n");
-            sleep(1);
-            return main();      //takes another photo from user
-        }
         sleep(1);
     }
 }
@@ -118,9 +122,8 @@ void writeImage() {
     writeGSBMP(imageName, img);
 }
 
-void bwFilter1() {
+void bwFilter() {
     //calculate Average grey pixel
-    ////////need to check if this calculates Avg correctly
     int avg = 0;
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
@@ -237,6 +240,18 @@ void darkenAndLightenFilter() {
                 img[i][j] /= 2;
             }
         }
+}
+
+void edgeFilter() {
+    bwFilter();
+    for (int i = 0;i < SIZE;i++) {
+        for (int j = 0;j < SIZE;j++) {
+            if (img[i][j] != img[i][j + 1] || img[i][j] != img[i + 1][j])
+                img[i][j] = 0;
+            else
+                img[i][j] = 255;
+        }
+    }
 }
 
 void enlargeFilter() {
