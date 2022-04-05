@@ -17,7 +17,7 @@ void bwFilter1();                 // 1
 void invertFilter();              // 2
 void mergeFilter();               // 3
 void flipFilter();                // 4
-void rotateFilter();              // 5
+int rotateFilter();              // 5
 void darkenAndLightenFilter();    // 6
 // 7
 void enlargeFilter();             // 8
@@ -187,30 +187,17 @@ void flipFilter() {
     }
 }
 
-void rotateFilter() {
+int rotateFilter() {
     int angle;
     cout << "Rotate (90), (180), (270) or (360) degrees?\n";
     cin >> angle;
-    if (angle == 360) {
-        rotate90();
-        rotate90();
-        rotate90();
-        rotate90();
-    }
-    else if (angle == 270) {
-        rotate90();
-        rotate90();
-        rotate90();
-    }
-    else if (angle == 180) {
-        rotate90();
-        rotate90();
-    }
-    else if (angle == 90) {
-        rotate90();
+    if (angle == 360 || angle == 270 || angle == 180 || angle == 90) {
+        for (int i = 0; i < angle / 90; i++) {
+            rotate90();
+        }
     }
     else {
-        cout << "Not a recognized angle! Please try again\n";
+        cout << "Unrecognized angle! Please try again\n";
         return rotateFilter();
     }
 }
@@ -301,7 +288,10 @@ void extractQuarter(unsigned char * & ptr, int quarter) {
     }
     else {
         cout << "Unrecognized quarter!\n";
-        quarter = 1;
+        startRow = 0;
+        startCol = 0;
+        endRow = SIZE / 2;
+        endCol = SIZE / 2;
     }
 
     int k = 0;
