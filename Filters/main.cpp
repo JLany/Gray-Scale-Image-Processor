@@ -7,17 +7,17 @@
 using namespace std;
 
 unsigned char img[SIZE][SIZE];
-unsigned char temp[4][SIZE/2][SIZE/2] = {};
-unsigned char quarter[(SIZE/2)*(SIZE/2)] = {};
-
-
-void readImage();
+unsigned char temp[4][SIZE/2][SIZE/2] = {};    // The use of 3D array here is for organizing        q1
+unsigned char quarter[(SIZE/2)*(SIZE/2)] = {}; // memory, so quarters get stored squentially:       q2
+                                               // this makes appending elements in the memory       q3
+                                               // is surely going to finish a quarter entirely      q4
+void readImage();                              // before moving to the next quarter.
 void writeImage();
 void bwFilter1();                 // 1
 void invertFilter();              // 2
 void mergeFilter();               // 3
 void flipFilter();                // 4
-int rotateFilter();              // 5
+void rotateFilter();              // 5
 void darkenAndLightenFilter();    // 6
 // 7
 void enlargeFilter();             // 8
@@ -187,7 +187,7 @@ void flipFilter() {
     }
 }
 
-int rotateFilter() {
+void rotateFilter() {
     int angle;
     cout << "Rotate (90), (180), (270) or (360) degrees?\n";
     cin >> angle;
@@ -241,7 +241,7 @@ void darkenAndLightenFilter() {
 
 void enlargeFilter() {
     int inputQuarter;
-    unsigned char * pQuarter = quarter;
+    unsigned char * pQuarter = quarter; // Point at a quarter-sized 2D array to store a quarter into.
     cout << "Which quarter to enlarge 1, 2, 3 or 4?\n";
     cin >> inputQuarter;
     // Extract a certain quarter to work with
@@ -249,8 +249,8 @@ void enlargeFilter() {
     // Enlarge that quarter into the whole image
     int k = 0;
     for (int i = 0; i < SIZE; i+=2) {
-        for (int j = 0; j < SIZE; j+=2) {
-            img[i][j] = pQuarter[k];
+        for (int j = 0; j < SIZE; j+=2) { // by putting each single pixel from quarter
+            img[i][j] = pQuarter[k];      // into 4 pixels of the original image.
             img[i][j+1] = pQuarter[k];
             img[i+1][j] = pQuarter[k];
             img[i+1][j+1] = pQuarter[k];
@@ -262,6 +262,7 @@ void enlargeFilter() {
 
 void extractQuarter(unsigned char * & ptr, int quarter) {
     int startRow, endRow, startCol, endCol;
+    // Determine boundries according to quarter
     if (quarter == 1) {
         startRow = 0;
         startCol = 0;
@@ -298,8 +299,8 @@ void extractQuarter(unsigned char * & ptr, int quarter) {
     for (int i = startRow; i < endRow; i++) {
         for (int j = startCol; j < endCol; j++) {
             ptr[k++] = img[i][j];
-        }
-    }
+        }   // Due to the squential organization of memory we can               
+    }       // store the image row-by-row with a single iterator(k)
 }
 
 
@@ -366,38 +367,40 @@ void mirrorFilter() {
 
 void shuffleFilter() {
     string order;
-    unsigned char * pQuarter = quarter;
-    int arr = 0;
-    int k = 0, s = 0;
+    unsigned char * pQuarter = quarter; // Point at a quarter-sized 2D array to store a quarter into.
+    unsigned char * pTemp = &temp[0][0][0]; // Point at temp 3D array (divided into 4 quarters)
+    int k = 0;
     cout << "New order of quarters ?\n";
-    cin.ignore();
-    getline(cin, order);
-    for (int i = 0; i < order.length(); i++) {
-        if (order[i] == ' ') {
-            continue;
-        }
-        unsigned char * pTemp = &temp[arr++][0][0];
+    cin.ignore(); // For getline() to work properly
+    getline(cin, order);                       
+    for (int i = 0; i < order.length(); i++) { // Fill a temp. array with the shuffled image
+        if (order[i] == ' ') {                 // a quarter per iteration
+            continue; 
+        } 
         extractQuarter(pQuarter, (int) (order[i] - '0'));
         for (int j = 0; j < ((SIZE * SIZE) / 4); j++) {
-            pTemp[j] = pQuarter[j];
+            pTemp[k] = pQuarter[j]; // Store extracted-quarter[original] inside current quarter[temp]
+            k++;
         }
     }
-    int q = 0, row = 0, col = 0;
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            img[i][j] = temp[q][row][col];
-            col++;
-            if (j == SIZE / 2 - 1) {
-                col = 0;
-                q++;
-            }
-        }
-        q--;
-        row++;
-        if (i == SIZE / 2 - 2) {
+    // Transfer temp. array into original image.
+    int qrtr = 0, row = 0, col = 0;
+    for (int i = 0; i < SIZE; i++) { // Store a 3D array into a 2D array
+        if (i == SIZE / 2) {
+            qrtr += 2; // Go to next half (Vertically)
             row = 0;
-            q += 2;
         }
+        col = 0;
+        for (int j = 0; j < SIZE; j++) {
+            if (j == SIZE / 2) {
+                qrtr++; // Go to next quarter(Horizontally), same row
+                col = 0;
+            }
+            img[i][j] = temp[qrtr][row][col];
+            col++;
+        }
+        qrtr--; // Go back to previous quarter(Horizontally), new row
+        row++;
     }
 }
 
