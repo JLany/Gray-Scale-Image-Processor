@@ -276,25 +276,15 @@ void enlargeFilter() {
 
 
 void extractQuarter(unsigned char * & ptr, int quarter) {
-    int startRow, endRow, startCol, endCol;
+    int startRow = 0, endRow = SIZE/2, startCol = 0, endCol = SIZE/2;
     // Determine boundries according to quarter
-    if (quarter == 1) {
-        startRow = 0;
-        startCol = 0;
-        endRow = SIZE / 2;
-        endCol = SIZE / 2;
-    }
-    else if (quarter == 2) {
-        startRow = 0;
+    if (quarter == 2) {
         startCol = SIZE / 2;
-        endRow = SIZE / 2;
         endCol = SIZE;
     }
     else if (quarter == 3) {
         startRow = SIZE / 2;
-        startCol = 0;
         endRow = SIZE;
-        endCol = SIZE / 2;
     }
     else if (quarter == 4) {
         startRow = SIZE / 2;
@@ -302,14 +292,9 @@ void extractQuarter(unsigned char * & ptr, int quarter) {
         endRow = SIZE;
         endCol = SIZE;
     }
-    else {
+    if (quarter < 1 or quarter > 4)
         cout << "Unrecognized quarter!\n";
-        startRow = 0;
-        startCol = 0;
-        endRow = SIZE / 2;
-        endCol = SIZE / 2;
-    }
-
+    
     int k = 0;
     for (int i = startRow; i < endRow; i++) {
         for (int j = startCol; j < endCol; j++) {
