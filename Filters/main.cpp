@@ -256,7 +256,7 @@ void edgeFilter() {
 
 void enlargeFilter() {
     int inputQuarter;
-    unsigned char * pQuarter = quarter; // Point at a quarter-sized 2D array to store a quarter into.
+    unsigned char * pQuarter = quarter; // Point at a quarter-sized array to store a quarter into.
     cout << "Which quarter to enlarge 1, 2, 3 or 4?\n";
     cin >> inputQuarter;
     // Extract a certain quarter to work with
@@ -367,7 +367,7 @@ void mirrorFilter() {
 
 void shuffleFilter() {
     string order;
-    unsigned char * pQuarter = quarter; // Point at a quarter-sized 2D array to store a quarter into.
+    unsigned char * pQuarter = quarter; // Point at a quarter-sized array to store a quarter into.
     unsigned char * pTemp = &temp[0][0][0]; // Point at temp 3D array (divided into 4 quarters)
     int k = 0;
     cout << "New order of quarters ?\n";
