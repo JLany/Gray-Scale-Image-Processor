@@ -139,15 +139,15 @@ void bwFilter() {
             avg = avg + img[i][j];
         }
     }
-    avg = avg / (SIZE * SIZE);
+    avg = avg / (SIZE * SIZE);              // sum of all pixels values / size of the picture
 
     //Apply B&W Filter
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            if (img[i][j] > avg)
-                img[i][j] = 255;
+            if (img[i][j] > avg)            // if pixel value is higher than average
+                img[i][j] = 255;            // turn it white
             else
-                img[i][j] = 0;
+                img[i][j] = 0;              // else turn it black
         }
     }
 }
@@ -180,22 +180,22 @@ void mergeFilter(){
 void flipFilter() {
     string flip;
     printf("h to flip horizontally, v to flip vertically: ");
-    cin >> flip;
+    cin >> flip;                        // take user input for flip direction
     if (flip == "h") {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE / 2; j++) {
-                swap(img[i][j], img[i][SIZE - 1 - j]);
+                swap(img[i][j], img[i][SIZE - 1 - j]);      // swap pixel with it's corresponding horizontal pixel
             }
         }
     } else if (flip == "v") {
         for (int i = 0; i < SIZE / 2; i++) {
             for (int j = 0; j < SIZE; j++) {
-                swap(img[i][j], img[SIZE - 1 - i][j]);
+                swap(img[i][j], img[SIZE - 1 - i][j]);      // swap pixel with it's corresponding vertical pixel
             }
         }
     } else {
         printf("Invalid input, Please try again\n");
-        return flipFilter();
+        return flipFilter();                                // recursion in case of invalid input
     }
 }
 
@@ -255,17 +255,17 @@ void edgeFilter() {
     bwFilter();
     for (int i = 0;i < SIZE;i++) {
         for (int j = 0;j < SIZE;j++) {
-            if (img[i][j] != img[i][j + 1] || img[i][j] != img[i + 1][j])
-                img[i][j] = 0;
-            else
-                img[i][j] = 255;
+            if (img[i][j] != img[i][j + 1] || img[i][j] != img[i + 1][j])    // if pixel is not the same value as the next horizontal or vetrical pixel
+                img[i][j] = 0;                                               // make it black
+            else    
+                img[i][j] = 255;                                             // make it white
         }
     }
 }
 
 void enlargeFilter() {
     int inputQuarter;
-    unsigned char * pQuarter = quarter; // Point at a quarter-sized 2D array to store a quarter into.
+    unsigned char * pQuarter = quarter; // Point at a quarter-sized array to store a quarter into.
     cout << "Which quarter to enlarge 1, 2, 3 or 4?\n";
     cin >> inputQuarter;
     // Extract a certain quarter to work with
@@ -376,7 +376,7 @@ void mirrorFilter() {
 
 void shuffleFilter() {
     string order;
-    unsigned char * pQuarter = quarter; // Point at a quarter-sized 2D array to store a quarter into.
+    unsigned char * pQuarter = quarter; // Point at a quarter-sized array to store a quarter into.
     unsigned char * pTemp = &temp[0][0][0]; // Point at temp 3D array (divided into 4 quarters)
     int k = 0;
     cout << "New order of quarters ?\n";
