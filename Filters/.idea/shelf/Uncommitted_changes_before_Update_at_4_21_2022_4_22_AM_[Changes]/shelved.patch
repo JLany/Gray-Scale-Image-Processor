@@ -1,0 +1,228 @@
+Index: main.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include <iostream>\r\n#include <cstring>\r\n#include <cmath>\r\n#include \"bmplib.cpp\"\r\nusing namespace std;\r\n\r\nunsigned char img[SIZE][SIZE];\r\nunsigned char quarter[SIZE/2][SIZE/2];\r\n\r\nvoid readImage();\r\nvoid writeImage();\r\nvoid bwFilter1();                 // 1\r\nvoid invertFilter();              // 2\r\nvoid mergeFilter();               // 3\r\nvoid flipFilter();                // 4\r\nvoid rotateFilter();              // 5\r\nvoid darkenAndLightenFilter();    // 6\r\n// 7\r\nvoid enlargeFilter();             // 8\r\nvoid shrinkFilter();              // 9\r\nvoid mirrorFilter();              // a\r\n// b\r\nvoid blurFilter();                // c\r\n\r\nvoid rotate90();\r\nvoid firstQuarter();\r\nvoid secondQuarter();\r\nvoid thirdQuarter();\r\nvoid fourthQuarter();\r\n\r\nint main() {\r\n    string userInput;\r\n    readImage();\t\t//gets image from user\r\n    while (true) {\r\n        //give user choices\r\n        printf(\"Please Select a filter:\\n1- Black & White Filter\\n2- Invert Filter\\n3- Merge Filter\\n4 - Flip Image\\n5 - Rotate Image\\n\");\r\n        printf(\"6 - Darken and Lighten Image\\n7 - Detect Image Edges\\n8 - Enlarge Image\\n9 - Shrink Image\\na - Mirror Image\\nb - Shuffle Image\\nc - Blur Image\\ns - Save changes\\n0 - To end\\n\");\r\n\r\n        cin >> userInput;\r\n        if (userInput == \"1\") {\r\n            bwFilter1();\r\n            printf(\"Black and white complete\\n\");\r\n        }\r\n        else if (userInput == \"2\") {\r\n            invertFilter();\r\n            printf(\"Image Inverted\\n\");\r\n        }\r\n        else if (userInput == \"3\"){\r\n            mergeFilter();\r\n            printf(\"2 images merged\\n\");\r\n        }\r\n        else if (userInput == \"4\") {\r\n            flipFilter();\r\n            printf(\"Image flipped\\n\");\r\n        }\r\n        else if (userInput == \"5\") {\r\n            rotateFilter();\r\n            printf(\"Image rotated\\n\");\r\n        }\r\n        else if (userInput == \"6\") {\r\n            darkenAndLightenFilter();\r\n            printf(\"Image lightened/darkened\\n\");\r\n        }\r\n        else if (userInput == \"8\") {\r\n            enlargeFilter();\r\n            printf(\"Image enlarged\\n\");\r\n        }\r\n        else if (userInput == \"9\") {\r\n            shrinkFilter();\r\n            printf(\"Image shrunk\\n\");\r\n        }\r\n        else if (userInput == \"a\") {\r\n            mirrorFilter();\r\n            printf(\"Image mirrored\\n\");\r\n        }\r\n        else if (userInput == \"c\"){\r\n            blurFilter();\r\n            printf(\"Image blurred\\n\");\r\n        }\r\n        else if (userInput == \"s\") {\r\n            writeImage();\r\n            printf(\"Save completed\\n\");\r\n        }\r\n        else if (userInput == \"0\") {\r\n            printf(\"Program Finished\");\r\n            break;\r\n        }\r\n        else\r\n        {\r\n            printf(\"Invalid Input. Please try again\\n\");\r\n            return main();      //takes another photo from user\r\n        }\r\n\r\n    }\r\n}\r\n\r\n\r\nvoid readImage() {\r\n    char imageName[100];\r\n    printf(\"Please enter name of the image to process: \");\r\n    cin >> imageName;\r\n    strcat(imageName, \".bmp\");\r\n    readGSBMP(imageName, img);\r\n}\r\n\r\nvoid writeImage() {\r\n    char imageName[100];\r\n    printf(\"Please enter name of the new image: \");\r\n    cin >> imageName;\r\n    strcat(imageName, \".bmp\");\r\n    writeGSBMP(imageName, img);\r\n}\r\n\r\nvoid bwFilter1() {\r\n    //calculate Average grey pixel\r\n    ////////need to check if this calculates Avg correctly\r\n    int avg = 0;\r\n    for (int i = 0; i < SIZE; i++) {\r\n        for (int j = 0; j < SIZE; j++) {\r\n            avg = avg + img[i][j];\r\n        }\r\n    }\r\n    avg = avg / (SIZE * SIZE);\r\n\r\n    //Apply B&W Filter\r\n    for (int i = 0; i < SIZE; i++) {\r\n        for (int j = 0; j < SIZE; j++) {\r\n            if (img[i][j] > avg)\r\n                img[i][j] = 255;\r\n            else\r\n                img[i][j] = 0;\r\n        }\r\n    }\r\n}\r\n\r\nvoid invertFilter() {\r\n    for (int i = 0; i < SIZE; i++) {\r\n        for (int j = 0; j < SIZE; j++) {\r\n            img[i][j] = 255 - img[i][j]; // Invert each pixel\r\n        }\r\n    }\r\n}\r\n\r\nvoid mergeFilter(){\r\n    // Takes the name of the image to be merged with the current one\r\n    char imageName2[100];\r\n    unsigned char img2[SIZE][SIZE];\r\n    cout << \"Please enter name of the image to merge: \" << endl;\r\n    cin >> imageName2;\r\n    strcat(imageName2, \".bmp\");\r\n    readGSBMP(imageName2, img2);\r\n\r\n    // Merges the 2 images\r\n    for (int i = 0; i < SIZE; ++i) {\r\n        for (int j = 0; j < SIZE; ++j) {\r\n            img[i][j] = (img[i][j] + img2[i][j]) / 2;\r\n        }\r\n    }\r\n}\r\n\r\nvoid flipFilter() {\r\n    string flip;\r\n    printf(\"h to flip horizontally, v to flip vertically: \");\r\n    cin >> flip;\r\n    if (flip == \"h\") {\r\n        for (int i = 0; i < SIZE; i++) {\r\n            for (int j = 0; j < SIZE / 2; j++) {\r\n                swap(img[i][j], img[i][SIZE - 1 - j]);\r\n            }\r\n        }\r\n    } else if (flip == \"v\") {\r\n        for (int i = 0; i < SIZE / 2; i++) {\r\n            for (int j = 0; j < SIZE; j++) {\r\n                swap(img[i][j], img[SIZE - 1 - i][j]);\r\n            }\r\n        }\r\n    } else {\r\n        printf(\"Invalid input, Please try again\\n\");\r\n        return flipFilter();\r\n    }\r\n}\r\n\r\nvoid rotateFilter() {\r\n    int angle;\r\n    cout << \"Rotate (90), (180), (270) or (360) degrees?\\n\";\r\n    cin >> angle;\r\n    if (angle == 360) {\r\n        rotate90();\r\n        rotate90();\r\n        rotate90();\r\n        rotate90();\r\n    }\r\n    else if (angle == 270) {\r\n        rotate90();\r\n        rotate90();\r\n        rotate90();\r\n    }\r\n    else if (angle == 180) {\r\n        rotate90();\r\n        rotate90();\r\n    }\r\n    else if (angle == 90) {\r\n        rotate90();\r\n    }\r\n    else {\r\n        cout << \"Not a recognized angle! Please try again\\n\";\r\n        return rotateFilter();\r\n    }\r\n}\r\n\r\nvoid rotate90() {\r\n    unsigned char temp[SIZE][SIZE];\r\n    // Store img into a temporary array\r\n    for (int i = 0; i < SIZE; i++) {\r\n        for (int j = 0; j < SIZE; j++) {\r\n            temp[i][j] = img[i][j];\r\n        }\r\n    }\r\n    // Store into img rotated 90 Deg.\r\n    for (int i = 0; i < SIZE; i++) {\r\n        for (int j = 0; j < SIZE; j++) {\r\n            img[j][SIZE-1-i] = temp[i][j];\r\n        }\r\n    }\r\n}\r\n\r\nvoid darkenAndLightenFilter() {\r\n    string rspns;\r\n    cout << \"Do you want to lighten or darken the image? \" << endl;\r\n    cin >> rspns;\r\n    transform(rspns.begin(), rspns.end(), rspns.begin(), ::tolower);\r\n    // Lightens an image\r\n    if (rspns == \"lighten\")\r\n        for (int i = 0; i < SIZE; ++i) {\r\n            for (int j = 0; j < SIZE; ++j) {\r\n                (img[i][j] * 1.5 > 255) ? img[i][j] = 255 : img[i][j] += 0.5 * img[i][j];\r\n            }\r\n        }\r\n        // Darkens an image\r\n    else if (rspns == \"darken\")\r\n        for (int i = 0; i < SIZE; ++i) {\r\n            for (int j = 0; j < SIZE; ++j) {\r\n                img[i][j] /= 2;\r\n            }\r\n        }\r\n}\r\n\r\nvoid enlargeFilter() {\r\n    char inputQuarter;\r\n    cout << \"Which quarter to enlarge 1, 2, 3 or 4?\\n\";\r\n    cin >> inputQuarter;\r\n    // Take a certain quarter to work with\r\n    if (inputQuarter == '1') {\r\n        firstQuarter();\r\n    }\r\n    else if (inputQuarter == '2') {\r\n        secondQuarter();\r\n    }\r\n    else if (inputQuarter == '3') {\r\n        thirdQuarter();\r\n    }\r\n    else if (inputQuarter == '4') {\r\n        fourthQuarter();\r\n    }\r\n    else {\r\n        cout << \"Unrecognized quarter!\\n\";\r\n        firstQuarter();\r\n    }\r\n    // Enlarge that quarter into the whole image\r\n    int k = 0;\r\n    for (int i = 0; i < SIZE; i+=2) {\r\n        int s = 0;\r\n        for (int j = 0; j < SIZE; j+=2) { // By putting each single pixel in the quarter\r\n            img[i][j] = quarter[k][s];    // into 4 pixels of the original-size image\r\n            img[i+1][j] = quarter[k][s];\r\n            img[i][j+1] = quarter[k][s];\r\n            img[i+1][j+1] = quarter[k][s];\r\n            s++;\r\n        }\r\n        k++;\r\n    }\r\n}\r\n\r\nvoid firstQuarter() { // Extracts first quarter\r\n    for (int i = 0; i < SIZE/2; i++) {\r\n        for (int j = 0; j < SIZE/2; j++) {\r\n            quarter[i][j] = img[i][j];\r\n        }\r\n    }\r\n}\r\n\r\nvoid secondQuarter() { // Extracts second quarter\r\n    for (int i = 0; i < SIZE/2; i++) {\r\n        for (int j = SIZE/2; j < SIZE; j++) {\r\n            quarter[i][j] = img[i][j];\r\n        }\r\n    }\r\n}\r\n\r\nvoid thirdQuarter() { // Extracts third quarter\r\n    int k = 0;\r\n    for (int i = SIZE/2; i < SIZE; i++) {\r\n        for (int j = 0; j < SIZE/2; j++) {\r\n            quarter[k][j] = img[i][j];\r\n        }\r\n        k++;\r\n    }\r\n}\r\n\r\nvoid fourthQuarter() { // Extracts fourth quarter\r\n    int k = 0;\r\n    for (int i = SIZE/2; i < SIZE; i++) {\r\n        int s = 0;\r\n        for (int j = SIZE/2; j < SIZE; j++) {\r\n            quarter[k][s] = img[i][j];\r\n            s++;\r\n        }\r\n        k++;\r\n    }\r\n}\r\n\r\nvoid shrinkFilter(){\r\n    int shrinkFactor, x = 0, y = 0;\r\n    cout << \"By which factor do you want to shrink the image: 2, 3, or 4?\" << endl;\r\n    cin >> shrinkFactor;\r\n    unsigned char newImg[SIZE][SIZE] = {{0}};   //creating a new array to store the shrunk image\r\n    for (int i = 0; i < SIZE; i += shrinkFactor) {\r\n        for (int j = 0; j < SIZE; j += shrinkFactor) {\r\n            newImg[x][y++] = img[i][j];\r\n        }\r\n        x++;\r\n        y = 0;\r\n    }\r\n    for (int i = 0; i < SIZE; ++i) {\r\n        for (int j = 0; j < SIZE; ++j) {\r\n            img[i][j] = newImg[i][j];\r\n        }\r\n    }\r\n}\r\n\r\nvoid mirrorFilter() {\r\n    string mirrorInput;\r\n    printf(\"1- to Mirror Left half, 2- to Mirror Right half\\n3- to Mirror Upper half, 4- to Mirror Lower half\\n\");\r\n    cin >> mirrorInput;\r\n    if (mirrorInput == \"1\") {                           //left half mirror\r\n        for (int i = 0; i < SIZE; i++) {\r\n            for (int j = SIZE / 2; j < SIZE; j++) {     //loop over right half\r\n                img[i][j] = img[i][SIZE - 1 -j];            //change every pixel of right half to the opposite half\r\n            }\r\n        }\r\n    }\r\n    else if (mirrorInput == \"2\") {                  //right half mirror\r\n        for (int i = 0; i < SIZE; i++) {\r\n            for (int j = 0; j < (SIZE / 2); j++) {    //loop over left half\r\n                img[i][j] = img[i][SIZE - 1 -j];          //change every pixel to its opposite half\r\n            }\r\n        }\r\n    }\r\n    else if (mirrorInput == \"3\") {                  //upper half mirror\r\n        for (int i = SIZE / 2; i < SIZE; i++) {\r\n            for (int j = 0; j < SIZE; j++) {        //loop over lower half\r\n                img[i][j] = img[SIZE - 1 - i][j];        //change every pixel to its opposite half\r\n            }\r\n        }\r\n    }\r\n    else if (mirrorInput == \"4\") {                  //lower half mirror\r\n        for (int i = 0;i < (SIZE / 2);i++) {\r\n            for (int j = 0;j < SIZE;j++) {          //loop over upper half\r\n                img[i][j] = img[SIZE -1 - i][j];    //change every pixel to its opposite half\r\n            }\r\n        }\r\n    }\r\n    else {\r\n        printf(\"Invalid input. Please try again\\n\");\r\n        return mirrorFilter();\r\n    }\r\n}\r\n\r\nvoid blurFilter(){\r\n    int avg, sum = 0;\r\n    // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 horizontally\r\n    for (int i = 0; i < SIZE; ++i) {\r\n        for (int j = 0; j < SIZE; j++) {\r\n            for (int k = 0; k < 8; ++k) {\r\n                sum += img[i][j + k];\r\n            }\r\n            avg = sum/8;\r\n            img[i][j] = avg;\r\n            sum = 0;\r\n        }\r\n\r\n    }\r\n    sum = 0;\r\n    // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 vertically\r\n    for (int i = 0; i < SIZE; ++i) {\r\n        for (int j = 0; j < SIZE; j++) {\r\n            for (int k = 0; k < 8; ++k) {\r\n                sum += img[j + k][i];\r\n            }\r\n            avg = sum/8;\r\n            img[j][i] = avg;\r\n            sum = 0;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.cpp b/main.cpp
+--- a/main.cpp	(revision f4cd2fd9b35d164ccd434e171a7b16c87e49ca8d)
++++ b/main.cpp	(date 1650336292697)
+@@ -376,30 +376,39 @@
+     }
+ }
+ 
+-void blurFilter(){
++void blurFilter() {
+     int avg, sum = 0;
+     // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 horizontally
+     for (int i = 0; i < SIZE; ++i) {
+         for (int j = 0; j < SIZE; j++) {
+-            for (int k = 0; k < 8; ++k) {
+-                sum += img[i][j + k];
+-            }
+-            avg = sum/8;
+-            img[i][j] = avg;
+-            sum = 0;
++            if (j <= 247) {                              // makes sure the index doesn't go beyond 256
++                for (int k = 0; k < 8; ++k) {
++                    sum += img[i][j + k];
++                }
++                avg = sum / 8;
++                img[i][j] = avg;
++                sum = 0;
++            }
++            else {
++                img[i][j] = avg;
++            }
+         }
+-
+     }
+     sum = 0;
+     // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 vertically
+     for (int i = 0; i < SIZE; ++i) {
+         for (int j = 0; j < SIZE; j++) {
+-            for (int k = 0; k < 8; ++k) {
+-                sum += img[j + k][i];
+-            }
+-            avg = sum/8;
+-            img[j][i] = avg;
+-            sum = 0;
++            if (j <= 247) {                             // makes sure the index doesn't go beyond 256
++                for (int k = 0; k < 8; ++k) {
++                    sum += img[j + k][i];
++                }
++                avg = sum / 8;
++                img[j][i] = avg;
++                sum = 0;
++            }
++            else {
++                img[j][i] = avg;
++            }
+         }
+     }
+-}
+\ No newline at end of file
++}
+Index: cmake-build-debug/CMakeFiles/clion-log.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"C:\\Program Files\\JetBrains\\CLion 2021.3.3\\bin\\cmake\\win\\bin\\cmake.exe\" -DCMAKE_BUILD_TYPE=Debug -G \"CodeBlocks - MinGW Makefiles\" \"C:\\Users\\Maya Ayman\\Desktop\\teamTask\\Gray-Scale-Image-Processor\\Filters\"\r\n-- The C compiler identification is GNU 11.2.0\r\n-- The CXX compiler identification is GNU 11.2.0\r\n-- Detecting C compiler ABI info\r\n-- Detecting C compiler ABI info - done\r\n-- Check for working C compiler: C:/Program Files/JetBrains/CLion 2021.3.3/bin/mingw/bin/gcc.exe - skipped\r\n-- Detecting C compile features\r\n-- Detecting C compile features - done\r\n-- Detecting CXX compiler ABI info\r\n-- Detecting CXX compiler ABI info - done\r\n-- Check for working CXX compiler: C:/Program Files/JetBrains/CLion 2021.3.3/bin/mingw/bin/g++.exe - skipped\r\n-- Detecting CXX compile features\r\n-- Detecting CXX compile features - done\r\n-- Configuring done\r\n-- Generating done\r\n-- Build files have been written to: C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake-build-debug/CMakeFiles/clion-log.txt b/cmake-build-debug/CMakeFiles/clion-log.txt
+--- a/cmake-build-debug/CMakeFiles/clion-log.txt	(revision f4cd2fd9b35d164ccd434e171a7b16c87e49ca8d)
++++ b/cmake-build-debug/CMakeFiles/clion-log.txt	(date 1650507694502)
+@@ -1,16 +1,4 @@
+ "C:\Program Files\JetBrains\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "C:\Users\Maya Ayman\Desktop\teamTask\Gray-Scale-Image-Processor\Filters"
+--- The C compiler identification is GNU 11.2.0
+--- The CXX compiler identification is GNU 11.2.0
+--- Detecting C compiler ABI info
+--- Detecting C compiler ABI info - done
+--- Check for working C compiler: C:/Program Files/JetBrains/CLion 2021.3.3/bin/mingw/bin/gcc.exe - skipped
+--- Detecting C compile features
+--- Detecting C compile features - done
+--- Detecting CXX compiler ABI info
+--- Detecting CXX compiler ABI info - done
+--- Check for working CXX compiler: C:/Program Files/JetBrains/CLion 2021.3.3/bin/mingw/bin/g++.exe - skipped
+--- Detecting CXX compile features
+--- Detecting CXX compile features - done
+ -- Configuring done
+ -- Generating done
+ -- Build files have been written to: C:/Users/Maya Ayman/Desktop/teamTask/Gray-Scale-Image-Processor/Filters/cmake-build-debug
+Index: cmake-build-debug/CMakeFiles/Makefile.cmake
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># CMAKE generated file: DO NOT EDIT!\r\n# Generated by \"MinGW Makefiles\" Generator, CMake Version 3.21\r\n\r\n# The generator used is:\r\nset(CMAKE_DEPENDS_GENERATOR \"MinGW Makefiles\")\r\n\r\n# The top level Makefile was generated from the following files:\r\nset(CMAKE_MAKEFILE_DEPENDS\r\n  \"CMakeCache.txt\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCCompiler.cmake.in\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCCompilerABI.c\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCInformation.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCXXCompiler.cmake.in\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCXXCompilerABI.cpp\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCXXInformation.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCompilerIdDetection.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCXXCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompileFeatures.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompilerABI.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompilerId.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineRCCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineSystem.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeFindBinUtils.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeFindCodeBlocks.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeGenericSystem.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeMinGWFindMake.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeParseImplicitIncludeInfo.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeParseImplicitLinkInfo.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeParseLibraryArchitecture.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeRCCompiler.cmake.in\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeRCInformation.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeSystem.cmake.in\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestCCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestCXXCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestCompilerCommon.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestRCCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ADSP-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ARMCC-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ARMClang-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/AppleClang-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Borland-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Bruce-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Clang-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Clang-DetermineCompilerInternal.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Compaq-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Cray-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Embarcadero-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Fujitsu-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GHS-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-C.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-FindBinUtils.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/HP-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/HP-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IAR-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Intel-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/MSVC-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/NVHPC-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/NVIDIA-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/PGI-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/PathScale-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ROCMClang-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SCO-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SDCC-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SunPro-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/TI-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Watcom-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XL-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XL-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XLClang-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/zOS-C-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Internal/FeatureTesting.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-Determine-CXX.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU-C-ABI.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU-C.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU-CXX-ABI.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU-CXX.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-windres.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/WindowsPaths.cmake\"\r\n  \"C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/ProcessorCount.cmake\"\r\n  \"../CMakeLists.txt\"\r\n  \"CMakeFiles/3.21.1/CMakeCCompiler.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeCXXCompiler.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeRCCompiler.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeSystem.cmake\"\r\n  )\r\n\r\n# The corresponding makefile is:\r\nset(CMAKE_MAKEFILE_OUTPUTS\r\n  \"Makefile\"\r\n  \"CMakeFiles/cmake.check_cache\"\r\n  )\r\n\r\n# Byproducts of CMake generate step:\r\nset(CMAKE_MAKEFILE_PRODUCTS\r\n  \"CMakeFiles/3.21.1/CMakeSystem.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeCCompiler.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeCXXCompiler.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeRCCompiler.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeCCompiler.cmake\"\r\n  \"CMakeFiles/3.21.1/CMakeCXXCompiler.cmake\"\r\n  \"CMakeFiles/CMakeDirectoryInformation.cmake\"\r\n  )\r\n\r\n# Dependency information for all targets:\r\nset(CMAKE_DEPEND_INFO_FILES\r\n  \"CMakeFiles/Filters.dir/DependInfo.cmake\"\r\n  )\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake-build-debug/CMakeFiles/Makefile.cmake b/cmake-build-debug/CMakeFiles/Makefile.cmake
+--- a/cmake-build-debug/CMakeFiles/Makefile.cmake	(revision f4cd2fd9b35d164ccd434e171a7b16c87e49ca8d)
++++ b/cmake-build-debug/CMakeFiles/Makefile.cmake	(date 1650507693678)
+@@ -7,95 +7,21 @@
+ # The top level Makefile was generated from the following files:
+ set(CMAKE_MAKEFILE_DEPENDS
+   "CMakeCache.txt"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCCompiler.cmake.in"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCCompilerABI.c"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCInformation.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCXXCompiler.cmake.in"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCXXCompilerABI.cpp"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCXXInformation.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeCompilerIdDetection.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCXXCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompileFeatures.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompilerABI.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineCompilerId.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineRCCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeDetermineSystem.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeFindBinUtils.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeFindCodeBlocks.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeGenericSystem.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeMinGWFindMake.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeParseImplicitIncludeInfo.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeParseImplicitLinkInfo.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeParseLibraryArchitecture.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeRCCompiler.cmake.in"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeRCInformation.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeSystem.cmake.in"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestCCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestCXXCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestCompilerCommon.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/CMakeTestRCCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ADSP-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ARMCC-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ARMClang-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/AppleClang-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Borland-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Bruce-C-DetermineCompiler.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Clang-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Clang-DetermineCompilerInternal.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Compaq-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Cray-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Embarcadero-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Fujitsu-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GHS-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-C-DetermineCompiler.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-C.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU-FindBinUtils.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/GNU.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/HP-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/HP-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IAR-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Intel-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/MSVC-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/NVHPC-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/NVIDIA-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/PGI-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/PathScale-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/ROCMClang-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SCO-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SDCC-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SunPro-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/TI-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/Watcom-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XL-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XL-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XLClang-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/zOS-C-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Internal/FeatureTesting.cmake"
+-  "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-Determine-CXX.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU-C-ABI.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU-C.cmake"
+   "C:/Program Files/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21/Modules/Platform/Windows-GNU-CXX-ABI.cmake"
+@@ -120,12 +46,6 @@
+ 
+ # Byproducts of CMake generate step:
+ set(CMAKE_MAKEFILE_PRODUCTS
+-  "CMakeFiles/3.21.1/CMakeSystem.cmake"
+-  "CMakeFiles/3.21.1/CMakeCCompiler.cmake"
+-  "CMakeFiles/3.21.1/CMakeCXXCompiler.cmake"
+-  "CMakeFiles/3.21.1/CMakeRCCompiler.cmake"
+-  "CMakeFiles/3.21.1/CMakeCCompiler.cmake"
+-  "CMakeFiles/3.21.1/CMakeCXXCompiler.cmake"
+   "CMakeFiles/CMakeDirectoryInformation.cmake"
+   )
+ 
+Index: cmake-build-debug/Testing/Temporary/LastTest.log
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>Start testing: Apr 04 16:53 Egypt Standard Time\r\n----------------------------------------------------------\r\nEnd testing: Apr 04 16:53 Egypt Standard Time\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake-build-debug/Testing/Temporary/LastTest.log b/cmake-build-debug/Testing/Temporary/LastTest.log
+--- a/cmake-build-debug/Testing/Temporary/LastTest.log	(revision f4cd2fd9b35d164ccd434e171a7b16c87e49ca8d)
++++ b/cmake-build-debug/Testing/Temporary/LastTest.log	(date 1650507694735)
+@@ -1,3 +1,3 @@
+-Start testing: Apr 04 16:53 Egypt Standard Time
++Start testing: Apr 21 04:21 Egypt Standard Time
+ ----------------------------------------------------------
+-End testing: Apr 04 16:53 Egypt Standard Time
++End testing: Apr 21 04:21 Egypt Standard Time
