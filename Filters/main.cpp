@@ -41,6 +41,8 @@ void extractQuarter(unsigned char* &, int);
 
 
 int main() {
+    // NOTE: The program loops on the same picture until saved, The user can apply multiple filters on the same picture.
+    // The program asks for a new picture only after the user save the previous picture.
     string userInput;
     readImage();		//gets image from user
     while (true) {
@@ -132,7 +134,7 @@ void writeImage() {
 }
 
 void bwFilter() {
-    //calculate Average grey pixel
+    //calculate Average gray pixel
     int avg = 0;
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
@@ -257,7 +259,7 @@ void edgeFilter() {
         for (int j = 0;j < SIZE;j++) {
             if (img[i][j] != img[i][j + 1] || img[i][j] != img[i + 1][j])    // if pixel is not the same value as the next horizontal or vetrical pixel
                 img[i][j] = 0;                                               // make it black
-            else    
+            else
                 img[i][j] = 255;                                             // make it white
         }
     }
