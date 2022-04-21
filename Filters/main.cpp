@@ -1,11 +1,11 @@
 // FCAI - Programming 1 - 2022 - Assignment 3
 // Program Name: Gray-Scale-Image-Processor.cpp
-// Last Modification Date: Apr 5, 2022
+// Last Modification Date: Apr 21, 2022
 // Author1 and ID and Group: Mahmoud Adel  | 20210563 | S25
 // Author2 and ID and Group: Maya Ayman    | 20210508 | S25
 // Author3 and ID and Group: Yousef Kilany | 20210544 | S25
 // Teaching Assistant: Eng. Mohamed Fateaha 
-// Purpose: This program processes images taken from the user, in many different ways.
+// Purpose: This program processes images taken from the user in many different ways.
 
 #include <iostream>
 #include <cstring>
@@ -242,7 +242,7 @@ void darkenAndLightenFilter() {
                 (img[i][j] * 1.5 > 255) ? img[i][j] = 255 : img[i][j] += 0.5 * img[i][j];
             }
         }
-        // Darkens an image
+    // Darkens an image
     else if (rspns == "darken")
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
@@ -318,7 +318,14 @@ void shrinkFilter(){
     int shrinkFactor, x = 0, y = 0;
     cout << "By which factor do you want to shrink the image: 2, 3, or 4?" << endl;
     cin >> shrinkFactor;
-    unsigned char newImg[SIZE][SIZE] = {{0}};   //creating a new array to store the shrunk image
+    unsigned char newImg[SIZE][SIZE];      //creating a new array to store the shrunk image
+
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            newImg[i][j] = 255;
+        }
+    }
+    // Shrinking the image by removing some pixels
     for (int i = 0; i < SIZE; i += shrinkFactor) {
         for (int j = 0; j < SIZE; j += shrinkFactor) {
             newImg[x][y++] = img[i][j];
