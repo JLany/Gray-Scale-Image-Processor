@@ -414,30 +414,39 @@ void shuffleFilter() {
 }
 
 
-void blurFilter(){
+void blurFilter() {
     int avg, sum = 0;
     // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 horizontally
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; j++) {
-            for (int k = 0; k < 8; ++k) {
-                sum += img[i][j + k];
+            if (j <= 247) {                              // makes sure the index doesn't go beyond 256
+                for (int k = 0; k < 8; ++k) {
+                    sum += img[i][j + k];
+                }
+                avg = sum / 8;
+                img[i][j] = avg;
+                sum = 0;
             }
-            avg = sum/8;
-            img[i][j] = avg;
-            sum = 0;
+            else {
+                img[i][j] = avg;
+            }
         }
-
     }
     sum = 0;
     // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 vertically
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; j++) {
-            for (int k = 0; k < 8; ++k) {
-                sum += img[j + k][i];
+            if (j <= 247) {                             // makes sure the index doesn't go beyond 256
+                for (int k = 0; k < 8; ++k) {
+                    sum += img[j + k][i];
+                }
+                avg = sum / 8;
+                img[j][i] = avg;
+                sum = 0;
             }
-            avg = sum/8;
-            img[j][i] = avg;
-            sum = 0;
+            else {
+                img[j][i] = avg;
+            }
         }
     }
 }
