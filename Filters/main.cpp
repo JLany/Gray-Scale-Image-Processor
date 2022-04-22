@@ -1,11 +1,11 @@
 // FCAI - Programming 1 - 2022 - Assignment 3
 // Program Name: Gray-Scale-Image-Processor.cpp
-// Last Modification Date: Apr 5, 2022
+// Last Modification Date: Apr 21, 2022
 // Author1 and ID and Group: Mahmoud Adel  | 20210563 | S25
 // Author2 and ID and Group: Maya Ayman    | 20210508 | S25
 // Author3 and ID and Group: Yousef Kilany | 20210544 | S25
-// Teaching Assistant: Eng. Mohamed Fateaha 
-// Purpose: This program processes images taken from the user, in many different ways.
+// Teaching Assistant: Eng. Mahmoud Fateaha 
+// Purpose: This program processes images taken from the user in many different ways.
 
 #include <iostream>
 #include <cstring>
@@ -41,6 +41,8 @@ void extractQuarter(unsigned char* &, int);
 
 
 int main() {
+    // NOTE: The program loops on the same picture until saved, The user can apply multiple filters on the same picture.
+    // The program asks for a new picture only after the user save the previous picture.
     string userInput;
     readImage();		//gets image from user
     while (true) {
@@ -132,7 +134,7 @@ void writeImage() {
 }
 
 void bwFilter() {
-    //calculate Average grey pixel
+    //calculate Average gray pixel
     int avg = 0;
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
@@ -242,7 +244,7 @@ void darkenAndLightenFilter() {
                 (img[i][j] * 1.5 > 255) ? img[i][j] = 255 : img[i][j] += 0.5 * img[i][j];
             }
         }
-        // Darkens an image
+    // Darkens an image
     else if (rspns == "darken")
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
@@ -257,7 +259,7 @@ void edgeFilter() {
         for (int j = 0;j < SIZE;j++) {
             if (img[i][j] != img[i][j + 1] || img[i][j] != img[i + 1][j])    // if pixel is not the same value as the next horizontal or vetrical pixel
                 img[i][j] = 0;                                               // make it black
-            else    
+            else
                 img[i][j] = 255;                                             // make it white
         }
     }
@@ -318,7 +320,14 @@ void shrinkFilter(){
     int shrinkFactor, x = 0, y = 0;
     cout << "By which factor do you want to shrink the image: 2, 3, or 4?" << endl;
     cin >> shrinkFactor;
-    unsigned char newImg[SIZE][SIZE] = {{0}};   //creating a new array to store the shrunk image
+    unsigned char newImg[SIZE][SIZE];      //creating a new array to store the shrunk image
+
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            newImg[i][j] = 255;
+        }
+    }
+    // Shrinking the image by removing some pixels
     for (int i = 0; i < SIZE; i += shrinkFactor) {
         for (int j = 0; j < SIZE; j += shrinkFactor) {
             newImg[x][y++] = img[i][j];
@@ -414,30 +423,39 @@ void shuffleFilter() {
 }
 
 
-void blurFilter(){
+void blurFilter() {
     int avg, sum = 0;
     // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 horizontally
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; j++) {
-            for (int k = 0; k < 8; ++k) {
-                sum += img[i][j + k];
+            if (j <= 247) {                              // makes sure the index doesn't go beyond 256
+                for (int k = 0; k < 8; ++k) {
+                    sum += img[i][j + k];
+                }
+                avg = sum / 8;
+                img[i][j] = avg;
+                sum = 0;
             }
-            avg = sum/8;
-            img[i][j] = avg;
-            sum = 0;
+            else {
+                img[i][j] = avg;
+            }
         }
-
     }
     sum = 0;
     // Calculates average of each 8 subsequent pixels and assigns this value to each pixel of the 8 vertically
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; j++) {
-            for (int k = 0; k < 8; ++k) {
-                sum += img[j + k][i];
+            if (j <= 247) {                             // makes sure the index doesn't go beyond 256
+                for (int k = 0; k < 8; ++k) {
+                    sum += img[j + k][i];
+                }
+                avg = sum / 8;
+                img[j][i] = avg;
+                sum = 0;
             }
-            avg = sum/8;
-            img[j][i] = avg;
-            sum = 0;
+            else {
+                img[j][i] = avg;
+            }
         }
     }
 }
