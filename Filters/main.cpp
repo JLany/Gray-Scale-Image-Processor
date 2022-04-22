@@ -202,10 +202,11 @@ void flipFilter() {
 }
 
 void rotateFilter() {
-    int angle;
+    string userInput;
     cout << "Rotate (90), (180), (270) or (360) degrees?\n";
-    cin >> angle;
-    if (angle == 360 || angle == 270 || angle == 180 || angle == 90) {
+    cin >> userInput;
+    if (userInput == "360" || userInput == "270" || userInput == "180" || userInput == "90") {
+        int angle = stoi(userInput);
         for (int i = 0; i < angle / 90; i++) {
             rotate90();
         }
