@@ -16,7 +16,7 @@ This is a simple image processor that can apply 12 filters (either one filter at
 11) Shuffle Image (any order of quarters)
 12) Blur Image
 
-- The grayPics folder has some gray scale images to experience with. (make sure to include them in the same directory of the source code file)
+- "Filters" folder has some gray scale images to experience with. (Make sure to include them and the bmplib.cpp & bmplib.h in the same directory of the source code file)
 - The source code is "main.cpp" in Filters folder
 - To see the 12 filters applied check the Results folder.
 
