@@ -16,6 +16,8 @@ This is a simple image processor that can apply 12 filters (either one filter at
 11) Shuffle Image (any order of quarters)
 12) Blur Image
 
+- The grayPics folder has some gray scale images to experience with. (make sure to include them in the same directory of the source code file)
+- To see the 12 filters applied check the Results folder.
 
 ## Contributors: 
 [Mahmoud Adel](https://github.com/DarkenSoda) - [Maya Ayman](https://github.com/MayaZayn) - [Yousef Kilany](https://github.com/JLany)
